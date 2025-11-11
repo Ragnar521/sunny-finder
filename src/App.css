@@ -439,6 +439,149 @@ body {
   }
 }
 
+/* Webcam Modal Styles */
+.webcam-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.webcam-modal-content {
+  position: relative;
+  background: white;
+  border-radius: 24px;
+  max-width: 900px;
+  width: 100%;
+  max-height: 90vh;
+  overflow: hidden;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.4);
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.webcam-modal-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.95);
+  border: none;
+  font-size: 2rem;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #333;
+  z-index: 10;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease;
+}
+
+.webcam-modal-close:hover {
+  background: #fff;
+  transform: scale(1.1);
+}
+
+.webcam-modal-close:active {
+  transform: scale(0.95);
+}
+
+.webcam-modal-image-container {
+  width: 100%;
+  max-height: 70vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f5f5f5;
+}
+
+.webcam-modal-image {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain;
+}
+
+.webcam-modal-info {
+  padding: 1.75rem 2rem;
+  text-align: center;
+  background: white;
+}
+
+.webcam-modal-info h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1.5rem;
+  color: var(--text-primary);
+}
+
+.webcam-modal-info p {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 1rem;
+}
+
+@media (max-width: 600px) {
+  .webcam-modal {
+    padding: 0.5rem;
+  }
+
+  .webcam-modal-content {
+    border-radius: 16px;
+    max-height: 95vh;
+  }
+
+  .webcam-modal-close {
+    width: 36px;
+    height: 36px;
+    font-size: 1.5rem;
+    top: 0.5rem;
+    right: 0.5rem;
+  }
+
+  .webcam-modal-info {
+    padding: 1.25rem 1rem;
+  }
+
+  .webcam-modal-info h3 {
+    font-size: 1.25rem;
+  }
+
+  .webcam-modal-info p {
+    font-size: 0.9rem;
+  }
+}
+
 @media (min-width: 768px) {
   .weather-info {
     grid-template-columns: repeat(2, 1fr);
