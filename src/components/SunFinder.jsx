@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react';
 import { sunnyDestinations } from '../data/cities';
 
+const MIN_SUNNY_TEMP_C = 20;
+const MAX_CLOUD_COVER = 70;
+
 function SunFinder({ onBack }) {
   const [destination, setDestination] = useState(null);
   const [webcams, setWebcams] = useState([]); // Array of webcams for carousel
@@ -103,7 +106,7 @@ function SunFinder({ onBack }) {
         );
         const data = await response.json();
 
-        if (data.main && data.main.temp >= 24 && data.clouds.all < 30) {
+        if (data.main && data.main.temp >= MIN_SUNNY_TEMP_C && data.clouds.all < MAX_CLOUD_COVER) {
           const placeData = {
             ...city,
             temp: Math.round(data.main.temp),
