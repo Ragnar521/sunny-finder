@@ -42,11 +42,13 @@ function SunFinder({ onBack }) {
   };
 
   // Helper function to format time from unix timestamp
-  const formatTime = (timestamp) => {
-    return new Date(timestamp * 1000).toLocaleTimeString('en-US', {
+  const formatTime = (timestamp, timezoneOffset = 0) => {
+    const date = new Date((timestamp + timezoneOffset) * 1000);
+    return date.toLocaleTimeString('en-US', {
       hour: '2-digit',
       minute: '2-digit',
-      hour12: false
+      hour12: false,
+      timeZone: 'UTC'
     });
   };
 
@@ -114,7 +116,8 @@ function SunFinder({ onBack }) {
             description: data.weather[0].description,
             sunrise: data.sys.sunrise,
             sunset: data.sys.sunset,
-            isDaytime: isDaytime(data.sys.sunrise, data.sys.sunset)
+            isDaytime: isDaytime(data.sys.sunrise, data.sys.sunset),
+            timezoneOffset: data.timezone ?? 0
           };
 
           // Separate daytime and nighttime locations
@@ -376,12 +379,12 @@ function SunFinder({ onBack }) {
                 <div className="time-info">
                   {destination.isDaytime ? (
                     <p className="time-status daytime">
-                      Sunset at {formatTime(destination.sunset)}
+                      Sunset at {formatTime(destination.sunset, destination.timezoneOffset)}
                     </p>
                   ) : (
                     <>
                       <p className="time-status nighttime">
-                        Sunrise at {formatTime(destination.sunrise)}
+                        Sunrise at {formatTime(destination.sunrise, destination.timezoneOffset)}
                       </p>
                       <p className="nighttime-warning">
                         ⚠️ Currently nighttime at this location
