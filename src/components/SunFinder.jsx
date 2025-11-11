@@ -3,15 +3,34 @@ import { sunnyDestinations } from '../data/cities';
 
 function SunFinder({ onBack }) {
   const [destination, setDestination] = useState(null);
-  const [webcam, setWebcam] = useState(null);
+  const [webcams, setWebcams] = useState([]); // Array of webcams for carousel
+  const [currentWebcamIndex, setCurrentWebcamIndex] = useState(0); // Current viewing index
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [showAchievement, setShowAchievement] = useState(false);
+  const [touchStart, setTouchStart] = useState(0);
+  const [touchEnd, setTouchEnd] = useState(0);
 
   useEffect(() => {
     findSunnyPlace();
   }, []);
+
+  // Keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (webcams.length > 1) {
+        if (e.key === 'ArrowLeft') {
+          goToPrevWebcam();
+        } else if (e.key === 'ArrowRight') {
+          goToNextWebcam();
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [webcams.length, currentWebcamIndex]);
 
   // Helper function to check if location is currently in daytime
   const isDaytime = (sunrise, sunset) => {
@@ -28,11 +47,45 @@ function SunFinder({ onBack }) {
     });
   };
 
+  // Carousel navigation
+  const goToPrevWebcam = () => {
+    setCurrentWebcamIndex((prev) =>
+      prev === 0 ? webcams.length - 1 : prev - 1
+    );
+  };
+
+  const goToNextWebcam = () => {
+    setCurrentWebcamIndex((prev) =>
+      prev === webcams.length - 1 ? 0 : prev + 1
+    );
+  };
+
+  // Touch gesture handlers
+  const handleTouchStart = (e) => {
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchMove = (e) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    if (touchStart - touchEnd > 50) {
+      // Swipe left - next webcam
+      goToNextWebcam();
+    }
+    if (touchStart - touchEnd < -50) {
+      // Swipe right - previous webcam
+      goToPrevWebcam();
+    }
+  };
+
   const findSunnyPlace = async () => {
     setLoading(true);
     setError(null);
     setDestination(null);
-    setWebcam(null);
+    setWebcams([]);
+    setCurrentWebcamIndex(0);
 
     try {
       const WEATHER_API_KEY = import.meta.env.VITE_OPENWEATHER_API_KEY;
@@ -96,28 +149,25 @@ function SunFinder({ onBack }) {
           setTimeout(() => setShowAchievement(true), 500); // Small delay for smooth reveal
         }
 
-        // Hledáme webkameru poblíž - SPRÁVNÝ FORMÁT PRO WINDY API V3
+        // Fetch multiple webcams (up to 5) - CAROUSEL FEATURE
         try {
-          console.log('Searching webcam for:', randomPlace.name, randomPlace.lat, randomPlace.lon);
-          
+          console.log('Searching webcams for:', randomPlace.name, randomPlace.lat, randomPlace.lon);
+
           const webcamResponse = await fetch(
-            `https://api.windy.com/webcams/api/v3/webcams?nearby=${randomPlace.lat},${randomPlace.lon},50&limit=1&include=images,location`,
+            `https://api.windy.com/webcams/api/v3/webcams?nearby=${randomPlace.lat},${randomPlace.lon},50&limit=5&include=images,location`,
             {
               headers: {
-                'x-windy-api-key': WINDY_API_KEY  // API klíč v headeru!
+                'x-windy-api-key': WINDY_API_KEY
               }
             }
           );
-          
+
           const webcamData = await webcamResponse.json();
           console.log('Webcam API response:', webcamData);
-          
+
           if (webcamData.webcams && webcamData.webcams.length > 0) {
-            const cam = webcamData.webcams[0];
-            console.log('Webcam found!', cam);
-            
-            // Parsuj Windy API V3 response
-            setWebcam({
+            // Parse all webcams
+            const parsedWebcams = webcamData.webcams.map(cam => ({
               id: cam.webcamId || cam.id,
               title: cam.title || `Live View - ${randomPlace.name}`,
               image: cam.images?.current?.preview || cam.images?.sizes?.preview?.url,
@@ -126,11 +176,15 @@ function SunFinder({ onBack }) {
                 city: cam.location?.city || randomPlace.name,
                 country: cam.location?.country || randomPlace.country
               }
-            });
+            }));
+
+            console.log(`Found ${parsedWebcams.length} webcam(s)!`);
+            setWebcams(parsedWebcams);
+            setCurrentWebcamIndex(0);
           } else {
             console.log('No webcam in range, using fallback image');
             // Fallback to Lorem Picsum if no webcam found
-            setWebcam({
+            setWebcams([{
               id: `fallback-${randomPlace.name}`,
               title: `${randomPlace.name} View`,
               image: `https://picsum.photos/seed/${encodeURIComponent(randomPlace.name)}/800/600`,
@@ -139,12 +193,12 @@ function SunFinder({ onBack }) {
                 city: randomPlace.name,
                 country: randomPlace.country
               }
-            });
+            }]);
           }
         } catch (webcamError) {
           console.error('Webcam API error:', webcamError);
           // Fallback to Lorem Picsum if API fails
-          setWebcam({
+          setWebcams([{
             id: `error-${randomPlace.name}`,
             title: `${randomPlace.name} View`,
             image: `https://picsum.photos/seed/${encodeURIComponent(randomPlace.name)}/800/600`,
@@ -153,7 +207,7 @@ function SunFinder({ onBack }) {
               city: randomPlace.name,
               country: randomPlace.country
             }
-          });
+          }]);
         }
       } else {
         setError('No sunny places found right now. Try again later! 🌤️');
@@ -168,11 +222,11 @@ function SunFinder({ onBack }) {
   };
 
   const buildImageStyle = () => {
-    if (!destination) return {};
+    if (!destination || webcams.length === 0) return {};
     const fallback = `https://source.unsplash.com/800x600/?${encodeURIComponent(
       destination.name
     )},landscape,city,skyline`;
-    const webcamImage = webcam?.image;
+    const webcamImage = webcams[currentWebcamIndex]?.image;
 
     return {
       backgroundImage: `linear-gradient(180deg, rgba(13, 16, 40, 0.15), rgba(13, 16, 40, 0.55)), url(${webcamImage || fallback})`,
@@ -180,7 +234,7 @@ function SunFinder({ onBack }) {
   };
 
   const handleImageClick = () => {
-    if (webcam) {
+    if (webcams.length > 0) {
       setShowModal(true);
     }
   };
@@ -196,6 +250,9 @@ function SunFinder({ onBack }) {
           .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
           .join(' ')
       : '';
+
+  const currentWebcam = webcams[currentWebcamIndex];
+  const hasMultipleWebcams = webcams.length > 1;
 
   return (
     <div className="finder-wrapper">
@@ -216,8 +273,8 @@ function SunFinder({ onBack }) {
         <div className="weather-card">
           <h2>😕 {error}</h2>
           <div className="card-actions">
-            <button 
-              className="btn btn-primary" 
+            <button
+              className="btn btn-primary"
               onClick={findSunnyPlace}
             >
               Try Again
@@ -229,26 +286,85 @@ function SunFinder({ onBack }) {
       {destination && (
         <div className="destination-section">
           <div className="destination-card">
-            <div
-              className={`destination-image${webcam ? ' has-webcam' : ''}`}
-              style={{
-                ...buildImageStyle(),
-                cursor: webcam ? 'pointer' : 'default'
-              }}
-              role="img"
-              aria-label={
-                webcam ? `Live webcam in ${destination.name}` : `${destination.name} skyline`
-              }
-              onClick={handleImageClick}
-            />
+            {/* Webcam Carousel */}
+            <div className="webcam-carousel">
+              {/* Previous button - only show if multiple webcams */}
+              {hasMultipleWebcams && (
+                <button
+                  className="carousel-btn carousel-btn-prev"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    goToPrevWebcam();
+                  }}
+                  aria-label="Previous webcam"
+                >
+                  ←
+                </button>
+              )}
+
+              {/* Webcam image */}
+              <div
+                className={`destination-image${currentWebcam ? ' has-webcam' : ''}`}
+                style={{
+                  ...buildImageStyle(),
+                  cursor: currentWebcam ? 'pointer' : 'default'
+                }}
+                role="img"
+                aria-label={
+                  currentWebcam ? `Live webcam in ${destination.name}` : `${destination.name} skyline`
+                }
+                onClick={handleImageClick}
+                onTouchStart={handleTouchStart}
+                onTouchMove={handleTouchMove}
+                onTouchEnd={handleTouchEnd}
+              />
+
+              {/* Next button - only show if multiple webcams */}
+              {hasMultipleWebcams && (
+                <button
+                  className="carousel-btn carousel-btn-next"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    goToNextWebcam();
+                  }}
+                  aria-label="Next webcam"
+                >
+                  →
+                </button>
+              )}
+
+              {/* Dots indicator - only show if multiple webcams */}
+              {hasMultipleWebcams && (
+                <div className="carousel-dots">
+                  {webcams.map((_, index) => (
+                    <span
+                      key={index}
+                      className={`carousel-dot ${index === currentWebcamIndex ? 'active' : ''}`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setCurrentWebcamIndex(index);
+                      }}
+                      aria-label={`Go to webcam ${index + 1}`}
+                    />
+                  ))}
+                </div>
+              )}
+
+              {/* Webcam counter - only show if multiple webcams */}
+              {hasMultipleWebcams && (
+                <div className="carousel-counter">
+                  {currentWebcamIndex + 1} / {webcams.length}
+                </div>
+              )}
+            </div>
 
             <div className="destination-info">
               <h2 className="destination-title">{destination.name}</h2>
               <p className="destination-country">{destination.country}</p>
 
-              {webcam && webcam.id && !String(webcam.id).startsWith('fallback') && !String(webcam.id).startsWith('error') && (
+              {currentWebcam && currentWebcam.id && !String(currentWebcam.id).startsWith('fallback') && !String(currentWebcam.id).startsWith('error') && (
                 <p className="webcam-note">
-                  📹 Live webcam: {webcam.title}
+                  📹 {currentWebcam.title}
                 </p>
               )}
 
@@ -298,23 +414,55 @@ function SunFinder({ onBack }) {
         </div>
       )}
 
-      {showModal && webcam && (
+      {/* Webcam Modal with Carousel Support */}
+      {showModal && currentWebcam && (
         <div className="webcam-modal" onClick={closeModal}>
           <div className="webcam-modal-content" onClick={(e) => e.stopPropagation()}>
             <button className="webcam-modal-close" onClick={closeModal} aria-label="Close">
               ×
             </button>
+
+            {/* Modal navigation - only show if multiple webcams */}
+            {hasMultipleWebcams && (
+              <>
+                <button
+                  className="modal-nav-btn modal-nav-prev"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    goToPrevWebcam();
+                  }}
+                  aria-label="Previous webcam"
+                >
+                  ←
+                </button>
+                <button
+                  className="modal-nav-btn modal-nav-next"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    goToNextWebcam();
+                  }}
+                  aria-label="Next webcam"
+                >
+                  →
+                </button>
+              </>
+            )}
+
             <div className="webcam-modal-image-container">
               <img
-                src={webcam.imageLarge || webcam.image}
-                alt={webcam.title}
+                src={currentWebcam.imageLarge || currentWebcam.image}
+                alt={currentWebcam.title}
                 className="webcam-modal-image"
               />
             </div>
+
             <div className="webcam-modal-info">
-              <h3>{webcam.title}</h3>
+              <h3>{currentWebcam.title}</h3>
               {destination && (
                 <p>{destination.name}, {destination.country}</p>
+              )}
+              {hasMultipleWebcams && (
+                <p className="modal-counter">{currentWebcamIndex + 1} / {webcams.length}</p>
               )}
             </div>
           </div>
