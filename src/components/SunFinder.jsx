@@ -84,12 +84,12 @@ function SunFinder({ onBack }) {
             });
           } else {
             console.log('No webcam in range, using fallback image');
-            // Fallback na Unsplash pokud není webkamera
+            // Fallback to Lorem Picsum if no webcam found
             setWebcam({
               id: `fallback-${randomPlace.name}`,
               title: `${randomPlace.name} View`,
-              image: `https://source.unsplash.com/800x600/?${encodeURIComponent(randomPlace.name)},landscape,travel`,
-              imageLarge: `https://source.unsplash.com/1200x800/?${encodeURIComponent(randomPlace.name)},landscape,travel`,
+              image: `https://picsum.photos/seed/${encodeURIComponent(randomPlace.name)}/800/600`,
+              imageLarge: `https://picsum.photos/seed/${encodeURIComponent(randomPlace.name)}/1200/800`,
               location: {
                 city: randomPlace.name,
                 country: randomPlace.country
@@ -98,12 +98,12 @@ function SunFinder({ onBack }) {
           }
         } catch (webcamError) {
           console.error('Webcam API error:', webcamError);
-          // Fallback pokud API selže
+          // Fallback to Lorem Picsum if API fails
           setWebcam({
             id: `error-${randomPlace.name}`,
             title: `${randomPlace.name} View`,
-            image: `https://source.unsplash.com/800x600/?${encodeURIComponent(randomPlace.name)},landscape,travel`,
-            imageLarge: `https://source.unsplash.com/1200x800/?${encodeURIComponent(randomPlace.name)},landscape,travel`,
+            image: `https://picsum.photos/seed/${encodeURIComponent(randomPlace.name)}/800/600`,
+            imageLarge: `https://picsum.photos/seed/${encodeURIComponent(randomPlace.name)}/1200/800`,
             location: {
               city: randomPlace.name,
               country: randomPlace.country
