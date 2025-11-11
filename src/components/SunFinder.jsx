@@ -7,6 +7,7 @@ function SunFinder({ onBack }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [showAchievement, setShowAchievement] = useState(false);
 
   useEffect(() => {
     findSunnyPlace();
@@ -87,6 +88,13 @@ function SunFinder({ onBack }) {
 
       if (randomPlace) {
         setDestination(randomPlace);
+
+        // Check for perfect weather achievement! 🏆
+        const isPerfectWeather = randomPlace.temp === 25 && randomPlace.clouds === 0;
+        if (isPerfectWeather) {
+          console.log('🏆 PERFECT WEATHER ACHIEVEMENT UNLOCKED!');
+          setTimeout(() => setShowAchievement(true), 500); // Small delay for smooth reveal
+        }
 
         // Hledáme webkameru poblíž - SPRÁVNÝ FORMÁT PRO WINDY API V3
         try {
@@ -308,6 +316,41 @@ function SunFinder({ onBack }) {
               {destination && (
                 <p>{destination.name}, {destination.country}</p>
               )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Perfect Weather Achievement Easter Egg 🏆 */}
+      {showAchievement && (
+        <div className="achievement-overlay" onClick={() => setShowAchievement(false)}>
+          <div className="achievement-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="confetti">
+              <div className="confetti-piece"></div>
+              <div className="confetti-piece"></div>
+              <div className="confetti-piece"></div>
+              <div className="confetti-piece"></div>
+              <div className="confetti-piece"></div>
+              <div className="confetti-piece"></div>
+              <div className="confetti-piece"></div>
+              <div className="confetti-piece"></div>
+              <div className="confetti-piece"></div>
+              <div className="confetti-piece"></div>
+            </div>
+            <div className="achievement-content">
+              <div className="achievement-trophy">🏆</div>
+              <h2 className="achievement-title">Perfect Weather Found!</h2>
+              <p className="achievement-subtitle">
+                25°C with 0% clouds
+                <br />
+                <span className="achievement-sparkle">✨ Absolute perfection! ✨</span>
+              </p>
+              <button
+                className="btn btn-primary achievement-btn"
+                onClick={() => setShowAchievement(false)}
+              >
+                Enjoy the Paradise! 🌴
+              </button>
             </div>
           </div>
         </div>
