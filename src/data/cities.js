@@ -19,6 +19,15 @@ export const sunnyDestinations = [
     { name: "Gran Canaria", country: "Spain", lat: 27.9202, lon: -15.5474 },
     { name: "Lanzarote", country: "Spain", lat: 29.0469, lon: -13.5900 },
     { name: "Fuerteventura", country: "Spain", lat: 28.3587, lon: -14.0538 },
+    { name: "Santa Cruz de La Palma", country: "Spain", lat: 28.6835, lon: -17.7642 },
+    { name: "San Sebastián de La Gomera", country: "Spain", lat: 28.0916, lon: -17.1115 },
+    { name: "Las Palmas", country: "Spain", lat: 28.1235, lon: -15.4363 },
+    { name: "Puerto del Carmen", country: "Spain", lat: 28.9220, lon: -13.6658 },
+    { name: "Corralejo", country: "Spain", lat: 28.7308, lon: -13.8696 },
+
+    // Madeira & Atlantik (oblíbené webcam výhledy)
+    { name: "Funchal", country: "Portugal", lat: 32.6669, lon: -16.9241 },
+    { name: "Porto Santo", country: "Portugal", lat: 33.0718, lon: -16.3410 },
     
     // Itálie
     { name: "Rome", country: "Italy", lat: 41.9028, lon: 12.4964 },
@@ -57,6 +66,12 @@ export const sunnyDestinations = [
     { name: "Abu Dhabi", country: "UAE", lat: 24.4539, lon: 54.3773 },
     { name: "Tel Aviv", country: "Israel", lat: 32.0853, lon: 34.7818 },
     { name: "Eilat", country: "Israel", lat: 29.5577, lon: 34.9519 },
+
+    // Perský záliv (zimní +20 °C a mariny s webcams)
+    { name: "Doha", country: "Qatar", lat: 25.2854, lon: 51.5310 },
+    { name: "Salalah", country: "Oman", lat: 17.0187, lon: 54.0963 },
+    { name: "Manama", country: "Bahrain", lat: 26.2285, lon: 50.5861 },
+    { name: "Ras Al Khaimah", country: "UAE", lat: 25.8007, lon: 55.9762 },
     
     // Severní Afrika
     { name: "Marrakech", country: "Morocco", lat: 31.6295, lon: -7.9811 },
@@ -65,6 +80,12 @@ export const sunnyDestinations = [
     { name: "Cairo", country: "Egypt", lat: 30.0444, lon: 31.2357 },
     { name: "Sharm El Sheikh", country: "Egypt", lat: 27.9158, lon: 34.3300 },
     { name: "Hurghada", country: "Egypt", lat: 27.2579, lon: 33.8116 },
+
+    // Kapverdy (věčně slunečné pláže s live cams)
+    { name: "Praia", country: "Cape Verde", lat: 14.9330, lon: -23.5133 },
+    { name: "Santa Maria", country: "Cape Verde", lat: 16.5970, lon: -22.9068 },
+    { name: "Sal Rei", country: "Cape Verde", lat: 16.1786, lon: -22.9179 },
+    { name: "Mindelo", country: "Cape Verde", lat: 16.8901, lon: -24.9804 },
     
     // Thajsko
     { name: "Bangkok", country: "Thailand", lat: 13.7563, lon: 100.5018 },
@@ -112,6 +133,7 @@ export const sunnyDestinations = [
     
     // USA - Florida, California & Hawaii
     { name: "Miami", country: "USA", lat: 25.7617, lon: -80.1918 },
+    { name: "Key West", country: "USA", lat: 24.5551, lon: -81.7800 },
     { name: "Los Angeles", country: "USA", lat: 34.0522, lon: -118.2437 },
     { name: "San Diego", country: "USA", lat: 32.7157, lon: -117.1611 },
     { name: "Honolulu", country: "USA", lat: 21.3099, lon: -157.8581 },
@@ -122,11 +144,16 @@ export const sunnyDestinations = [
     // Karibik
     { name: "Nassau", country: "Bahamas", lat: 25.0443, lon: -77.3504 },
     { name: "Montego Bay", country: "Jamaica", lat: 18.4762, lon: -77.8939 },
-    { name: "Aruba", country: "Aruba", lat: 12.5211, lon: -69.9683 },
-    { name: "Barbados", country: "Barbados", lat: 13.1939, lon: -59.5432 },
-    { name: "Saint Lucia", country: "Saint Lucia", lat: 13.9094, lon: -60.9789 },
     { name: "Curaçao", country: "Curaçao", lat: 12.1696, lon: -68.9900 },
     { name: "Punta Cana", country: "Dominican Republic", lat: 18.5601, lon: -68.3725 },
+    { name: "San Juan", country: "Puerto Rico", lat: 18.4655, lon: -66.1057 },
+    { name: "Marigot", country: "Saint Martin", lat: 18.0708, lon: -63.0501 },
+    { name: "Saint George's", country: "Grenada", lat: 12.0561, lon: -61.7488 },
+    { name: "Gustavia", country: "Saint Barthélemy", lat: 17.8962, lon: -62.8522 },
+    { name: "Philipsburg", country: "Sint Maarten", lat: 18.0260, lon: -63.0458 },
+    { name: "Grand Turk", country: "Turks and Caicos Islands", lat: 21.4603, lon: -71.1419 },
+    { name: "Road Town", country: "British Virgin Islands", lat: 18.4285, lon: -64.6185 },
+    { name: "Kralendijk", country: "Caribbean Netherlands", lat: 12.1443, lon: -68.2655 },
     
     // Austrálie
     { name: "Sydney", country: "Australia", lat: -33.8688, lon: 151.2093 },
@@ -144,7 +171,6 @@ export const sunnyDestinations = [
     { name: "Moorea", country: "French Polynesia", lat: -17.5388, lon: -149.8295 },
     { name: "Fiji (Nadi)", country: "Fiji", lat: -17.7765, lon: 177.4417 },
     { name: "Fiji (Suva)", country: "Fiji", lat: -18.1248, lon: 178.4501 },
-    { name: "Nouméa", country: "New Caledonia", lat: -22.2758, lon: 166.4580 },
     { name: "Port Vila", country: "Vanuatu", lat: -17.7333, lon: 168.3273 },
     { name: "Rarotonga", country: "Cook Islands", lat: -21.2367, lon: -159.7777 },
     { name: "Apia", country: "Samoa", lat: -13.8333, lon: -171.7500 },
@@ -166,7 +192,6 @@ export const sunnyDestinations = [
     // Střední & Jižní Amerika
     { name: "Buenos Aires", country: "Argentina", lat: -34.6037, lon: -58.3816 },
     { name: "Rio de Janeiro", country: "Brazil", lat: -22.9068, lon: -43.1729 },
-    { name: "Cartagena", country: "Colombia", lat: 10.3910, lon: -75.4794 },
     { name: "Santa Marta", country: "Colombia", lat: 11.2408, lon: -74.2099 },
     { name: "San José", country: "Costa Rica", lat: 9.9281, lon: -84.0907 },
     { name: "Panama City", country: "Panama", lat: 8.9824, lon: -79.5199 },
