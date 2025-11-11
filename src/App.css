@@ -1090,3 +1090,124 @@ body {
     padding: 1.2rem 1.5rem;
   }
 }
+
+/* Extreme Sun Mode Easter Egg 🔥 */
+.extreme-mode-badge {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  background: linear-gradient(135deg, #ff6b6b, #ff8c42);
+  color: white;
+  padding: 0.75rem 1.25rem;
+  border-radius: 24px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  animation: extremePulse 2s infinite;
+  box-shadow: 0 6px 20px rgba(255, 107, 107, 0.5);
+  z-index: 1000;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+@keyframes extremePulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 6px 20px rgba(255, 107, 107, 0.5);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 8px 25px rgba(255, 107, 107, 0.7);
+  }
+}
+
+.extreme-mode-activation {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  animation: extremeFadeIn 0.3s ease;
+}
+
+@keyframes extremeFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.extreme-mode-animation {
+  background: linear-gradient(135deg, #ff6b6b, #ff8c42, #ffd93d);
+  color: white;
+  padding: 3rem 2.5rem;
+  border-radius: 28px;
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 800;
+  animation: extremeScaleIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  box-shadow: 0 20px 60px rgba(255, 107, 107, 0.6),
+              0 0 80px rgba(255, 107, 107, 0.4);
+  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  max-width: 90%;
+  position: relative;
+  overflow: hidden;
+}
+
+.extreme-mode-animation::before {
+  content: '';
+  position: absolute;
+  inset: -50%;
+  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  animation: extremeShine 2s infinite;
+}
+
+@keyframes extremeShine {
+  0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+  100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+}
+
+@keyframes extremeScaleIn {
+  0% {
+    transform: scale(0.3) rotate(-10deg);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.05) rotate(2deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+.extreme-mode-animation p {
+  font-size: 1.15rem;
+  margin-top: 1rem;
+  opacity: 0.95;
+  font-weight: 600;
+  position: relative;
+  z-index: 10;
+}
+
+@media (max-width: 600px) {
+  .extreme-mode-badge {
+    top: 0.5rem;
+    right: 0.5rem;
+    padding: 0.6rem 1rem;
+    font-size: 0.75rem;
+  }
+
+  .extreme-mode-animation {
+    padding: 2rem 1.5rem;
+    font-size: 1.5rem;
+  }
+
+  .extreme-mode-animation p {
+    font-size: 1rem;
+  }
+}

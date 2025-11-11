@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-function HomeWeather({ onFindSun }) {
+function HomeWeather({ onFindSun, extremeMode }) {
   const [weather, setWeather] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -73,7 +73,7 @@ function HomeWeather({ onFindSun }) {
 
       <div className="card-actions">
         <button className="btn btn-primary" onClick={onFindSun}>
-          ☀️ Find Sun
+          {extremeMode ? '🔥 Find Extreme Heat' : '☀️ Find Sun'}
         </button>
       </div>
     </div>

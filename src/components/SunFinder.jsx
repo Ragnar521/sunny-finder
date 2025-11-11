@@ -2,9 +2,10 @@ import { useState, useEffect } from 'react';
 import { sunnyDestinations } from '../data/cities';
 
 const MIN_SUNNY_TEMP_C = 20;
+const EXTREME_SUNNY_TEMP_C = 30; // For extreme sun mode
 const MAX_CLOUD_COVER = 70;
 
-function SunFinder({ onBack }) {
+function SunFinder({ onBack, extremeMode, onExitExtremeMode }) {
   const [destination, setDestination] = useState(null);
   const [webcams, setWebcams] = useState([]); // Array of webcams for carousel
   const [currentWebcamIndex, setCurrentWebcamIndex] = useState(0); // Current viewing index
@@ -17,7 +18,7 @@ function SunFinder({ onBack }) {
 
   useEffect(() => {
     findSunnyPlace();
-  }, []);
+  }, [extremeMode]); // Re-search when extreme mode changes
 
   // Keyboard navigation
   useEffect(() => {
@@ -98,6 +99,9 @@ function SunFinder({ onBack }) {
       const daytimePlaces = [];
       const nighttimePlaces = [];
 
+      // Set temperature threshold based on extreme mode
+      const tempThreshold = extremeMode ? EXTREME_SUNNY_TEMP_C : MIN_SUNNY_TEMP_C;
+
       // Zkusíme náhodně vybrat max 30 míst a najít slunečné
       const shuffled = [...sunnyDestinations].sort(() => 0.5 - Math.random());
       const sampled = shuffled.slice(0, 30);
@@ -108,7 +112,7 @@ function SunFinder({ onBack }) {
         );
         const data = await response.json();
 
-        if (data.main && data.main.temp >= MIN_SUNNY_TEMP_C && data.clouds.all < MAX_CLOUD_COVER) {
+        if (data.main && data.main.temp >= tempThreshold && data.clouds.all < MAX_CLOUD_COVER) {
           const placeData = {
             ...city,
             temp: Math.round(data.main.temp),
@@ -215,8 +219,14 @@ function SunFinder({ onBack }) {
             }
           }]);
         }
-      } else {
-        setError('No sunny places found right now. Try again later! 🌤️');
+      }
+
+      if (!randomPlace) {
+        if (extremeMode) {
+          setError('No extreme heat locations found right now! Try again later or disable Extreme Sun Mode. 🔥');
+        } else {
+          setError('No sunny places found right now. Try again later! 🌤️');
+        }
       }
 
       setLoading(false);
@@ -260,9 +270,16 @@ function SunFinder({ onBack }) {
   const currentWebcam = webcams[currentWebcamIndex];
   const hasMultipleWebcams = webcams.length > 1;
 
+  const handleBackClick = () => {
+    if (extremeMode && onExitExtremeMode) {
+      onExitExtremeMode(); // Exit extreme mode when going back
+    }
+    onBack();
+  };
+
   return (
     <div className="finder-wrapper">
-      <button className="btn btn-secondary btn-back" onClick={onBack}>
+      <button className="btn btn-secondary btn-back" onClick={handleBackClick}>
         ← Back to Prague
       </button>
 
@@ -412,11 +429,13 @@ function SunFinder({ onBack }) {
             </div>
           </div>
 
-          <div className="destination-actions">
-            <button className="btn btn-primary" onClick={findSunnyPlace}>
-              🔄 Shuffle Again
-            </button>
-          </div>
+          {!extremeMode && (
+            <div className="destination-actions">
+              <button className="btn btn-primary" onClick={findSunnyPlace}>
+                🔄 Shuffle Again
+              </button>
+            </div>
+          )}
         </div>
       )}
 
