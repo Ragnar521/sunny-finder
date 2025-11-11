@@ -12,6 +12,21 @@ function SunFinder({ onBack }) {
     findSunnyPlace();
   }, []);
 
+  // Helper function to check if location is currently in daytime
+  const isDaytime = (sunrise, sunset) => {
+    const now = Math.floor(Date.now() / 1000); // current unix timestamp
+    return now >= sunrise && now <= sunset;
+  };
+
+  // Helper function to format time from unix timestamp
+  const formatTime = (timestamp) => {
+    return new Date(timestamp * 1000).toLocaleTimeString('en-US', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false
+    });
+  };
+
   const findSunnyPlace = async () => {
     setLoading(true);
     setError(null);
@@ -21,7 +36,8 @@ function SunFinder({ onBack }) {
     try {
       const WEATHER_API_KEY = import.meta.env.VITE_OPENWEATHER_API_KEY;
       const WINDY_API_KEY = import.meta.env.VITE_WINDY_API_KEY;
-      const sunnyPlaces = [];
+      const daytimePlaces = [];
+      const nighttimePlaces = [];
 
       // Zkusíme náhodně vybrat max 30 míst a najít slunečné
       const shuffled = [...sunnyDestinations].sort(() => 0.5 - Math.random());
@@ -34,21 +50,42 @@ function SunFinder({ onBack }) {
         const data = await response.json();
 
         if (data.main && data.main.temp >= 24 && data.clouds.all < 30) {
-          sunnyPlaces.push({
+          const placeData = {
             ...city,
             temp: Math.round(data.main.temp),
             clouds: data.clouds.all,
             description: data.weather[0].description,
-          });
+            sunrise: data.sys.sunrise,
+            sunset: data.sys.sunset,
+            isDaytime: isDaytime(data.sys.sunrise, data.sys.sunset)
+          };
+
+          // Separate daytime and nighttime locations
+          if (placeData.isDaytime) {
+            daytimePlaces.push(placeData);
+          } else {
+            nighttimePlaces.push(placeData);
+          }
         }
 
-        // Pokud najdeme alespoň 5 slunečných míst, máme dost na výběr
-        if (sunnyPlaces.length >= 5) break;
+        // Pokud najdeme alespoň 5 slunečných míst ve dne, máme dost na výběr
+        if (daytimePlaces.length >= 5) break;
       }
 
-      if (sunnyPlaces.length > 0) {
-        // Vyber náhodné z nalezených slunečných míst
-        const randomPlace = sunnyPlaces[Math.floor(Math.random() * sunnyPlaces.length)];
+      // Smart filtering: prioritize daytime, fallback to nighttime
+      let randomPlace = null;
+
+      if (daytimePlaces.length > 0) {
+        // Prefer daytime locations
+        randomPlace = daytimePlaces[Math.floor(Math.random() * daytimePlaces.length)];
+        console.log(`Found ${daytimePlaces.length} daytime sunny places, selected:`, randomPlace.name);
+      } else if (nighttimePlaces.length > 0) {
+        // Fallback to nighttime if no daytime places found
+        randomPlace = nighttimePlaces[Math.floor(Math.random() * nighttimePlaces.length)];
+        console.log(`No daytime places found, using nighttime location:`, randomPlace.name);
+      }
+
+      if (randomPlace) {
         setDestination(randomPlace);
 
         // Hledáme webkameru poblíž - SPRÁVNÝ FORMÁT PRO WINDY API V3
@@ -205,6 +242,26 @@ function SunFinder({ onBack }) {
                 <p className="webcam-note">
                   📹 Live webcam: {webcam.title}
                 </p>
+              )}
+
+              {/* Day/Night Status and Times */}
+              {destination.sunrise && destination.sunset && (
+                <div className="time-info">
+                  {destination.isDaytime ? (
+                    <p className="time-status daytime">
+                      Sunset at {formatTime(destination.sunset)}
+                    </p>
+                  ) : (
+                    <>
+                      <p className="time-status nighttime">
+                        Sunrise at {formatTime(destination.sunrise)}
+                      </p>
+                      <p className="nighttime-warning">
+                        ⚠️ Currently nighttime at this location
+                      </p>
+                    </>
+                  )}
+                </div>
               )}
 
               <div className="destination-weather">
