@@ -1211,3 +1211,159 @@ body {
     font-size: 1rem;
   }
 }
+
+/* Rage Mode Easter Egg 😡🔥 */
+.rage-mode-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 100, 0, 0.95);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999;
+  animation: fadeIn 0.3s ease;
+}
+
+.rage-mode-content {
+  background: linear-gradient(135deg, #ff4500, #ff6347);
+  padding: 40px;
+  border-radius: 30px;
+  text-align: center;
+  max-width: 600px;
+  width: 90%;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.shake-animation {
+  animation: shake 0.5s infinite;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  10% { transform: translate(-10px, -5px) rotate(-2deg); }
+  20% { transform: translate(10px, 5px) rotate(2deg); }
+  30% { transform: translate(-10px, 5px) rotate(-2deg); }
+  40% { transform: translate(10px, -5px) rotate(2deg); }
+  50% { transform: translate(-10px, -5px) rotate(-2deg); }
+  60% { transform: translate(10px, 5px) rotate(2deg); }
+  70% { transform: translate(-10px, 5px) rotate(-2deg); }
+  80% { transform: translate(10px, -5px) rotate(2deg); }
+  90% { transform: translate(-10px, -5px) rotate(-2deg); }
+}
+
+.rage-title {
+  color: white;
+  font-size: 32px;
+  margin-bottom: 20px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.rage-sun-gif {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  margin: 20px auto;
+  box-shadow: 0 0 40px rgba(255, 255, 0, 0.8);
+  display: block;
+}
+
+.rage-stats {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 20px;
+  border-radius: 15px;
+  margin: 20px 0;
+}
+
+.rage-stat {
+  display: flex;
+  justify-content: space-between;
+  color: white;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  font-size: 16px;
+}
+
+.rage-stat:last-child {
+  border-bottom: none;
+}
+
+.rage-label {
+  font-weight: bold;
+  text-align: left;
+}
+
+.rage-value {
+  color: #ffeb3b;
+  font-weight: bold;
+  text-align: right;
+}
+
+.rage-close-btn {
+  background: white;
+  color: #ff4500;
+  border: none;
+  padding: 15px 40px;
+  border-radius: 50px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.rage-close-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+}
+
+.rage-close-btn:active {
+  transform: scale(0.95);
+}
+
+/* Mobile responsive for Rage Mode */
+@media (max-width: 600px) {
+  .rage-mode-content {
+    padding: 30px 20px;
+    border-radius: 20px;
+  }
+
+  .rage-title {
+    font-size: 24px;
+    margin-bottom: 15px;
+  }
+
+  .rage-sun-gif {
+    width: 150px;
+    height: 150px;
+    margin: 15px auto;
+  }
+
+  .rage-stats {
+    padding: 15px;
+    margin: 15px 0;
+  }
+
+  .rage-stat {
+    font-size: 14px;
+    padding: 8px 0;
+    flex-direction: column;
+    gap: 5px;
+    align-items: flex-start;
+  }
+
+  .rage-label,
+  .rage-value {
+    text-align: left;
+  }
+
+  .rage-close-btn {
+    padding: 12px 30px;
+    font-size: 16px;
+  }
+}
