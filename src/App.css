@@ -36,7 +36,7 @@ body {
 
 .app {
   width: 100%;
-  max-width: 960px;
+  max-width: 100%;
   margin: 0 auto;
   padding: clamp(1.5rem, 4vw, 3rem);
   min-height: 100vh;
@@ -44,6 +44,12 @@ body {
   flex-direction: column;
   gap: clamp(1.25rem, 2vw, 2rem);
   align-items: center;
+}
+
+@media (min-width: 768px) {
+  .app {
+    max-width: 960px;
+  }
 }
 
 .app-header {
@@ -70,12 +76,19 @@ body {
 
 .app-main {
   flex: 1;
-  width: min(720px, 100%);
+  width: 100%;
+  max-width: 100%;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
   align-items: center;
   margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+  .app-main {
+    max-width: 720px;
+  }
 }
 
 .app-main-centered {
@@ -316,30 +329,50 @@ body {
 }
 
 .finder-wrapper {
-  width: min(640px, 100%);
+  width: 100%;
+  max-width: 100%;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
   margin: 0 auto;
 }
 
+@media (min-width: 768px) {
+  .finder-wrapper {
+    max-width: 640px;
+  }
+}
+
 .destination-section {
+  width: 100%;
+  max-width: 100%;
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
 }
 
 .destination-card {
+  width: 100%;
+  max-width: 100%;
   overflow: hidden;
   padding: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 .destination-image {
   width: 100%;
-  height: 260px;
+  max-width: 100%;
+  height: 100%;
   background-size: cover;
   background-position: center;
-  position: relative;
+  background-repeat: no-repeat;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 0;
 }
 
 .destination-image::after {
@@ -454,11 +487,25 @@ body {
 
 .destination-actions {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+  width: 100%;
 }
 
 .destination-actions .btn {
   width: min(320px, 100%);
+}
+
+.btn-flights {
+  background: linear-gradient(135deg, #00d4ff 0%, #0099ff 100%);
+  color: white;
+  box-shadow: 0 15px 30px rgba(0, 153, 255, 0.35);
+}
+
+.btn-flights:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 20px 35px rgba(0, 153, 255, 0.45);
 }
 
 @media (max-width: 600px) {
@@ -473,6 +520,16 @@ body {
 
   .destination-image {
     height: 220px;
+  }
+}
+
+@media (max-width: 480px) {
+  .app {
+    padding: 15px 10px;
+  }
+
+  body {
+    padding: 10px;
   }
 }
 
@@ -623,48 +680,129 @@ body {
 .webcam-carousel {
   position: relative;
   width: 100%;
+  max-width: 100%;
   height: 260px;
   overflow: hidden;
+  border-radius: 20px 20px 0 0;
+  display: block;
+  margin: 0;
+  padding: 0;
 }
 
-/* Carousel Navigation Buttons */
+/* Carousel Navigation Buttons - Liquid Glass Style */
 .carousel-btn {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: rgba(255, 255, 255, 0.9);
-  border: none;
-  width: 44px;
-  height: 44px;
+  background: linear-gradient(135deg,
+    rgba(255, 255, 255, 0.25) 0%,
+    rgba(255, 255, 255, 0.1) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  width: 52px;
+  height: 52px;
   border-radius: 50%;
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #333;
+  font-size: 0;
+  color: transparent;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 10;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  transition: all 0.2s ease;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  overflow: hidden;
+  outline: none;
+}
+
+.carousel-btn:focus {
+  outline: none;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+}
+
+.carousel-btn:focus-visible {
+  outline: 2px solid rgba(102, 126, 234, 0.5);
+  outline-offset: 2px;
+}
+
+.carousel-btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: linear-gradient(180deg,
+    rgba(255, 255, 255, 0.3) 0%,
+    rgba(255, 255, 255, 0) 50%,
+    rgba(0, 0, 0, 0.05) 100%);
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity 0.4s ease;
+}
+
+.carousel-btn::before {
+  content: '';
+  width: 13px;
+  height: 13px;
+  border-top: 3.5px solid rgba(255, 255, 255, 0.95);
+  border-right: 3.5px solid rgba(255, 255, 255, 0.95);
+  display: block;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+  z-index: 1;
+  position: relative;
+}
+
+.carousel-btn-prev::before {
+  transform: rotate(-135deg);
+  margin-left: 4px;
+}
+
+.carousel-btn-next::before {
+  transform: rotate(45deg);
+  margin-right: 4px;
 }
 
 .carousel-btn:hover {
-  background: #fff;
-  transform: translateY(-50%) scale(1.1);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+  background: linear-gradient(135deg,
+    rgba(102, 126, 234, 0.35) 0%,
+    rgba(118, 75, 162, 0.25) 100%);
+  border-color: rgba(255, 255, 255, 0.6);
+  transform: translateY(-50%) scale(1.12);
+  box-shadow:
+    0 12px 40px rgba(102, 126, 234, 0.3),
+    0 0 0 1px rgba(255, 255, 255, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+}
+
+.carousel-btn:hover::after {
+  opacity: 0.7;
+}
+
+.carousel-btn:hover::before {
+  border-color: rgba(255, 255, 255, 1);
+  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.6));
 }
 
 .carousel-btn:active {
-  transform: translateY(-50%) scale(0.95);
+  transform: translateY(-50%) scale(0.96);
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.2),
+    inset 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .carousel-btn-prev {
   left: 1rem;
+  right: auto;
 }
 
 .carousel-btn-next {
   right: 1rem;
+  left: auto;
 }
 
 /* Carousel Dots Indicator */
@@ -716,44 +854,121 @@ body {
   -webkit-backdrop-filter: blur(8px);
 }
 
-/* Modal Carousel Navigation */
+/* Modal Carousel Navigation - Liquid Glass Style */
 .modal-nav-btn {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: rgba(255, 255, 255, 0.95);
-  border: none;
-  width: 56px;
-  height: 56px;
+  background: linear-gradient(135deg,
+    rgba(255, 255, 255, 0.3) 0%,
+    rgba(255, 255, 255, 0.15) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  width: 64px;
+  height: 64px;
   border-radius: 50%;
-  font-size: 2rem;
-  font-weight: bold;
-  color: #333;
+  font-size: 0;
+  color: transparent;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 20;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
-  transition: all 0.2s ease;
+  box-shadow:
+    0 12px 48px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.1);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(24px) saturate(200%);
+  -webkit-backdrop-filter: blur(24px) saturate(200%);
+  position: relative;
+  overflow: hidden;
+  outline: none;
+}
+
+.modal-nav-btn:focus {
+  outline: none;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+}
+
+.modal-nav-btn:focus-visible {
+  outline: 2px solid rgba(102, 126, 234, 0.6);
+  outline-offset: 3px;
+}
+
+.modal-nav-btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: linear-gradient(180deg,
+    rgba(255, 255, 255, 0.35) 0%,
+    rgba(255, 255, 255, 0) 50%,
+    rgba(0, 0, 0, 0.08) 100%);
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity 0.4s ease;
+}
+
+.modal-nav-btn::before {
+  content: '';
+  width: 17px;
+  height: 17px;
+  border-top: 4.5px solid rgba(255, 255, 255, 0.98);
+  border-right: 4.5px solid rgba(255, 255, 255, 0.98);
+  display: block;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.25));
+  z-index: 1;
+  position: relative;
+}
+
+.modal-nav-prev::before {
+  transform: rotate(-135deg);
+  margin-left: 5px;
+}
+
+.modal-nav-next::before {
+  transform: rotate(45deg);
+  margin-right: 5px;
 }
 
 .modal-nav-btn:hover {
-  background: white;
-  transform: translateY(-50%) scale(1.1);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  background: linear-gradient(135deg,
+    rgba(102, 126, 234, 0.4) 0%,
+    rgba(118, 75, 162, 0.3) 100%);
+  border-color: rgba(255, 255, 255, 0.7);
+  transform: translateY(-50%) scale(1.15);
+  box-shadow:
+    0 16px 56px rgba(102, 126, 234, 0.4),
+    0 0 0 2px rgba(255, 255, 255, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.2);
+}
+
+.modal-nav-btn:hover::after {
+  opacity: 0.6;
+}
+
+.modal-nav-btn:hover::before {
+  border-color: rgba(255, 255, 255, 1);
+  filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.8));
 }
 
 .modal-nav-btn:active {
-  transform: translateY(-50%) scale(0.95);
+  transform: translateY(-50%) scale(0.96);
+  box-shadow:
+    0 6px 24px rgba(0, 0, 0, 0.25),
+    inset 0 3px 12px rgba(0, 0, 0, 0.15);
 }
 
 .modal-nav-prev {
   left: 1.5rem;
+  right: auto;
 }
 
 .modal-nav-next {
   right: 1.5rem;
+  left: auto;
 }
 
 /* Modal Counter */
@@ -780,17 +995,33 @@ body {
   }
 
   .carousel-btn {
-    width: 36px;
-    height: 36px;
-    font-size: 1.25rem;
+    width: 44px;
+    height: 44px;
+  }
+
+  .carousel-btn::before {
+    width: 11px;
+    height: 11px;
+    border-top: 3px solid rgba(255, 255, 255, 0.95);
+    border-right: 3px solid rgba(255, 255, 255, 0.95);
   }
 
   .carousel-btn-prev {
     left: 0.5rem;
+    right: auto;
+  }
+
+  .carousel-btn-prev::before {
+    margin-left: 3px;
   }
 
   .carousel-btn-next {
     right: 0.5rem;
+    left: auto;
+  }
+
+  .carousel-btn-next::before {
+    margin-right: 3px;
   }
 
   .carousel-dots {
@@ -815,17 +1046,33 @@ body {
   }
 
   .modal-nav-btn {
-    width: 44px;
-    height: 44px;
-    font-size: 1.5rem;
+    width: 52px;
+    height: 52px;
+  }
+
+  .modal-nav-btn::before {
+    width: 15px;
+    height: 15px;
+    border-top: 4px solid rgba(255, 255, 255, 0.98);
+    border-right: 4px solid rgba(255, 255, 255, 0.98);
   }
 
   .modal-nav-prev {
     left: 0.75rem;
+    right: auto;
+  }
+
+  .modal-nav-prev::before {
+    margin-left: 4px;
   }
 
   .modal-nav-next {
     right: 0.75rem;
+    left: auto;
+  }
+
+  .modal-nav-next::before {
+    margin-right: 4px;
   }
 
   .modal-counter {

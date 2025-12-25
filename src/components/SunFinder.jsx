@@ -277,6 +277,22 @@ function SunFinder({ onBack, extremeMode, onExitExtremeMode }) {
     onBack();
   };
 
+  const openGoogleFlights = (destination) => {
+    const origin = 'PRG'; // Prague airport code
+
+    // Format destination name for URL (remove accents and special chars)
+    const destinationName = destination.name
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '') // Remove accents
+      .replace(/\s+/g, '%20'); // Replace spaces with %20 for URL encoding
+
+    // Google Flights URL format
+    const googleFlightsUrl = `https://www.google.com/travel/flights?q=flights%20from%20${origin}%20to%20${destinationName}`;
+
+    // Open in new tab
+    window.open(googleFlightsUrl, '_blank');
+  };
+
   return (
     <div className="finder-wrapper">
       <button className="btn btn-secondary btn-back" onClick={handleBackClick}>
@@ -320,9 +336,7 @@ function SunFinder({ onBack, extremeMode, onExitExtremeMode }) {
                     goToPrevWebcam();
                   }}
                   aria-label="Previous webcam"
-                >
-                  ←
-                </button>
+                />
               )}
 
               {/* Webcam image */}
@@ -351,9 +365,7 @@ function SunFinder({ onBack, extremeMode, onExitExtremeMode }) {
                     goToNextWebcam();
                   }}
                   aria-label="Next webcam"
-                >
-                  →
-                </button>
+                />
               )}
 
               {/* Dots indicator - only show if multiple webcams */}
@@ -431,6 +443,13 @@ function SunFinder({ onBack, extremeMode, onExitExtremeMode }) {
 
           {!extremeMode && (
             <div className="destination-actions">
+              <button
+                className="btn btn-flights"
+                onClick={() => openGoogleFlights(destination)}
+              >
+                ✈️ Find Flights
+              </button>
+
               <button className="btn btn-primary" onClick={findSunnyPlace}>
                 🔄 Shuffle Again
               </button>
@@ -457,9 +476,7 @@ function SunFinder({ onBack, extremeMode, onExitExtremeMode }) {
                     goToPrevWebcam();
                   }}
                   aria-label="Previous webcam"
-                >
-                  ←
-                </button>
+                />
                 <button
                   className="modal-nav-btn modal-nav-next"
                   onClick={(e) => {
@@ -467,9 +484,7 @@ function SunFinder({ onBack, extremeMode, onExitExtremeMode }) {
                     goToNextWebcam();
                   }}
                   aria-label="Next webcam"
-                >
-                  →
-                </button>
+                />
               </>
             )}
 
