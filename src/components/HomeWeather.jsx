@@ -51,7 +51,10 @@ function HomeWeather({ onFindSun, extremeMode }) {
     <div className="home-section">
       <div className="weather-card home-card">
         <div className="home-card-header">
-          <span aria-hidden="true">📍</span>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" style={{display: 'inline-block', verticalAlign: 'middle'}}>
+            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" fill="currentColor" stroke="currentColor" strokeWidth="2"/>
+            <circle cx="12" cy="9" r="2.5" fill="var(--paper-light)"/>
+          </svg>
           <p>Prague Weather</p>
         </div>
 
@@ -73,7 +76,7 @@ function HomeWeather({ onFindSun, extremeMode }) {
 
       <div className="card-actions">
         <button className="btn btn-primary" onClick={onFindSun}>
-          {extremeMode ? '🔥 Find Extreme Heat' : '☀️ Find Sun'}
+          {extremeMode ? 'Find Extreme Heat' : 'Find Sun'}
         </button>
       </div>
     </div>

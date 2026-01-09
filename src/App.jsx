@@ -117,13 +117,13 @@ function App() {
             }}
             title="Triple click for surprise!"
           >
-            {angrySunMode ? '😡' : '☀️'}
+            ☀️
           </span>
           {' '}Sunny Finder
         </h1>
         <p>
           {extremeSunMode
-            ? "Find EXTREME heat when Prague is cold 🔥"
+            ? "Find EXTREME heat when Prague is cold"
             : "Find sunshine when Prague is grey"
           }
         </p>
@@ -132,7 +132,13 @@ function App() {
       {showExtremeModeActivation && extremeSunMode && (
         <div className="extreme-mode-activation">
           <div className="extreme-mode-animation">
-            🔥 EXTREME SUN MODE ACTIVATED 🔥
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" style={{display: 'inline-block', verticalAlign: 'middle', marginRight: '12px'}}>
+              <path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z" fill="white" stroke="white" strokeWidth="1.5"/>
+            </svg>
+            EXTREME SUN MODE ACTIVATED
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" style={{display: 'inline-block', verticalAlign: 'middle', marginLeft: '12px'}}>
+              <path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z" fill="white" stroke="white" strokeWidth="1.5"/>
+            </svg>
             <p>Searching for places above 30°C!</p>
           </div>
         </div>
@@ -158,7 +164,7 @@ function App() {
       {rageModeActive && (
         <div className="rage-mode-overlay">
           <div className="rage-mode-content shake-animation">
-            <h1 className="rage-title">CALM DOWN! I'M ALREADY HOT ENOUGH! 🔥</h1>
+            <h1 className="rage-title">CALM DOWN! I'M ALREADY HOT ENOUGH!</h1>
 
             <img
               src="https://plus.unsplash.com/premium_photo-1670210080045-a2e0da63dd99?q=80&w=400&h=400&auto=format&fit=crop&crop=center"

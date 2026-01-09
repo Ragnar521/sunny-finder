@@ -223,9 +223,9 @@ function SunFinder({ onBack, extremeMode, onExitExtremeMode }) {
 
       if (!randomPlace) {
         if (extremeMode) {
-          setError('No extreme heat locations found right now! Try again later or disable Extreme Sun Mode. 🔥');
+          setError('No extreme heat locations found right now! Try again later or disable Extreme Sun Mode.');
         } else {
-          setError('No sunny places found right now. Try again later! 🌤️');
+          setError('No sunny places found right now. Try again later!');
         }
       }
 
@@ -310,7 +310,7 @@ function SunFinder({ onBack, extremeMode, onExitExtremeMode }) {
 
       {error && (
         <div className="weather-card">
-          <h2>😕 {error}</h2>
+          <h2>{error}</h2>
           <div className="card-actions">
             <button
               className="btn btn-primary"
@@ -399,7 +399,11 @@ function SunFinder({ onBack, extremeMode, onExitExtremeMode }) {
 
               {currentWebcam && currentWebcam.id && !String(currentWebcam.id).startsWith('fallback') && !String(currentWebcam.id).startsWith('error') && (
                 <p className="webcam-note">
-                  📹 {currentWebcam.title}
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style={{display: 'inline-block', verticalAlign: 'middle', marginRight: '6px'}}>
+                    <rect x="2" y="6" width="16" height="12" fill="currentColor" stroke="currentColor" strokeWidth="2"/>
+                    <path d="M18 10L22 7v10l-4-3" fill="currentColor"/>
+                  </svg>
+                  {currentWebcam.title}
                 </p>
               )}
 
@@ -416,7 +420,12 @@ function SunFinder({ onBack, extremeMode, onExitExtremeMode }) {
                         Sunrise at {formatTime(destination.sunrise, destination.timezoneOffset)}
                       </p>
                       <p className="nighttime-warning">
-                        ⚠️ Currently nighttime at this location
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" style={{display: 'inline-block', verticalAlign: 'middle', marginRight: '6px'}}>
+                          <path d="M12 2L2 22h20L12 2z" fill="none" stroke="currentColor" strokeWidth="2.5"/>
+                          <line x1="12" y1="10" x2="12" y2="15" stroke="currentColor" strokeWidth="2.5"/>
+                          <circle cx="12" cy="18" r="1" fill="currentColor"/>
+                        </svg>
+                        Currently nighttime at this location
                       </p>
                     </>
                   )}
@@ -447,11 +456,17 @@ function SunFinder({ onBack, extremeMode, onExitExtremeMode }) {
                 className="btn btn-flights"
                 onClick={() => openGoogleFlights(destination)}
               >
-                ✈️ Find Flights
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" style={{display: 'inline-block', verticalAlign: 'middle', marginRight: '8px'}}>
+                  <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z" fill="currentColor"/>
+                </svg>
+                Find Flights
               </button>
 
               <button className="btn btn-primary" onClick={findSunnyPlace}>
-                🔄 Shuffle Again
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" style={{display: 'inline-block', verticalAlign: 'middle', marginRight: '8px'}}>
+                  <path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z" fill="currentColor"/>
+                </svg>
+                Shuffle Again
               </button>
             </div>
           )}
@@ -526,18 +541,23 @@ function SunFinder({ onBack, extremeMode, onExitExtremeMode }) {
               <div className="confetti-piece"></div>
             </div>
             <div className="achievement-content">
-              <div className="achievement-trophy">🏆</div>
+              <div className="achievement-trophy">
+                <svg width="120" height="120" viewBox="0 0 24 24" fill="none">
+                  <path d="M20 7h-3V4H7v3H4c-1.1 0-2 .9-2 2v3c0 2.21 1.79 4 4 4h.26l.82 4.12c.16.79.86 1.38 1.66 1.38h6.52c.8 0 1.5-.59 1.66-1.38L17.74 16H18c2.21 0 4-1.79 4-4V9c0-1.1-.9-2-2-2z" fill="white" stroke="white" strokeWidth="1"/>
+                  <rect x="9" y="19" width="6" height="3" fill="white"/>
+                </svg>
+              </div>
               <h2 className="achievement-title">Perfect Weather Found!</h2>
               <p className="achievement-subtitle">
                 25°C with 0% clouds
                 <br />
-                <span className="achievement-sparkle">✨ Absolute perfection! ✨</span>
+                <span className="achievement-sparkle">Absolute perfection!</span>
               </p>
               <button
                 className="btn btn-primary achievement-btn"
                 onClick={() => setShowAchievement(false)}
               >
-                Enjoy the Paradise! 🌴
+                Enjoy the Paradise!
               </button>
             </div>
           </div>
